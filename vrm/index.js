@@ -78,3 +78,47 @@ router.route("/rezervacija/:id").get(async (req, res) => {
   let rezervacije = await dohvat();
   res.json(rezervacije);
 });
+
+router.route("/osoba/:id").get(async (req, res) => {
+  async function dohvat() {
+    const id = req.params.id;
+    const collection = baza.collection("Personal");
+    let result = await collection.find({ _id: new ObjectId(id) }).toArray();
+    return result;
+  }
+  let rezervacije = await dohvat();
+  res.json(rezervacije);
+});
+
+router.route("/odrzavanje/:id").get(async (req, res) => {
+  async function dohvat() {
+    const id = req.params.id;
+    const collection = baza.collection("Odrzavanja");
+    let result = await collection.find({ _id: new ObjectId(id) }).toArray();
+    return result;
+  }
+  let rezervacije = await dohvat();
+  res.json(rezervacije);
+});
+
+router.route("/objekt/:id").get(async (req, res) => {
+  async function dohvat() {
+    const id = req.params.id;
+    const collection = baza.collection("Objekti");
+    let result = await collection.find({ _id: new ObjectId(id) }).toArray();
+    return result;
+  }
+  let rezervacije = await dohvat();
+  res.json(rezervacije);
+});
+
+router.route("/ciscenje/:id").get(async (req, res) => {
+  async function dohvat() {
+    const id = req.params.id;
+    const collection = baza.collection("Ciscenja");
+    let result = await collection.find({ _id: new ObjectId(id) }).toArray();
+    return result;
+  }
+  let rezervacije = await dohvat();
+  res.json(rezervacije);
+});
