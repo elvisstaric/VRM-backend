@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import cors from "cors";
 import baza from "./baza.js";
 import { ObjectId } from "mongodb";
+import auth from "./auth.js";
 
 const app = express();
 const router = express.Router();
@@ -12,6 +13,17 @@ app.use(router);
 let port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
+});
+
+router.route("/korisnik").post(async (req, res) => {
+  let korisnik = req.body;
+  let status;
+  try {
+    status = await auth.registracija(korisnik);
+    res.json({ Status: status });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 router.route("/objekt").get(async (req, res) => {
