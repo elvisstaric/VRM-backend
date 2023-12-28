@@ -1,3 +1,5 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express, { Router } from "express";
 import cors from "cors";
 import baza from "./baza.js";
@@ -23,6 +25,18 @@ router.route("/korisnik").post(async (req, res) => {
     res.json({ Status: status });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+router.route("/korisnik").get(async (req, res) => {
+  let email = req.query.email;
+  let password = req.query.password;
+
+  try {
+    let result = await auth.prijava(email, password);
+    res.json(result);
+  } catch (error) {
+    res.status(401).json({ error: error.message });
   }
 });
 
