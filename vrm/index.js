@@ -40,10 +40,14 @@ router.route("/korisnik").get(async (req, res) => {
   }
 });
 
-router.route("/objekt").get(async (req, res) => {
+router.route("/objekt").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Objekti");
-    let result = await collection.find({}).toArray();
+    let result = await collection
+      .find({
+        /*dohvat samo za tog korisnika*/
+      })
+      .toArray();
     return result;
   }
   let objekti = await dohvat();
@@ -51,7 +55,7 @@ router.route("/objekt").get(async (req, res) => {
 });
 
 //treba dodati da dohvaća samo za taj objekt!!
-router.route("/rezervacija").get(async (req, res) => {
+router.route("/rezervacija").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Rezervacije");
     let result = await collection.find({}).toArray();
@@ -62,7 +66,7 @@ router.route("/rezervacija").get(async (req, res) => {
 });
 
 //treba dodati da dohvaća samo za tog korisnika!!!!
-router.route("/osoba").get(async (req, res) => {
+router.route("/osoba").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Personal");
     let result = await collection.find({}).toArray();
@@ -73,7 +77,7 @@ router.route("/osoba").get(async (req, res) => {
 });
 
 //dodati da dohvaca samo za taj objekt
-router.route("/odrzavanje").get(async (req, res) => {
+router.route("/odrzavanje").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Odrzavanja");
     let result = await collection.find({}).toArray();
@@ -84,7 +88,7 @@ router.route("/odrzavanje").get(async (req, res) => {
 });
 
 //dodati da dohvaca samo za taj objekt
-router.route("/ciscenje").get(async (req, res) => {
+router.route("/ciscenje").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Ciscenja");
     let result = await collection.find({}).toArray();
@@ -94,7 +98,7 @@ router.route("/ciscenje").get(async (req, res) => {
   res.json(ciscenja);
 });
 
-router.route("/rezervacija/:id").get(async (req, res) => {
+router.route("/rezervacija/:id").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const id = req.params.id;
     const collection = baza.collection("Rezervacije");
@@ -105,7 +109,7 @@ router.route("/rezervacija/:id").get(async (req, res) => {
   res.json(rezervacije);
 });
 
-router.route("/osoba/:id").get(async (req, res) => {
+router.route("/osoba/:id").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const id = req.params.id;
     const collection = baza.collection("Personal");
@@ -116,7 +120,7 @@ router.route("/osoba/:id").get(async (req, res) => {
   res.json(rezervacije);
 });
 
-router.route("/odrzavanje/:id").get(async (req, res) => {
+router.route("/odrzavanje/:id").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const id = req.params.id;
     const collection = baza.collection("Odrzavanja");
@@ -127,7 +131,7 @@ router.route("/odrzavanje/:id").get(async (req, res) => {
   res.json(rezervacije);
 });
 
-router.route("/objekt/:id").get(async (req, res) => {
+router.route("/objekt/:id").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const id = req.params.id;
     const collection = baza.collection("Objekti");
@@ -138,7 +142,7 @@ router.route("/objekt/:id").get(async (req, res) => {
   res.json(rezervacije);
 });
 
-router.route("/ciscenje/:id").get(async (req, res) => {
+router.route("/ciscenje/:id").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const id = req.params.id;
     const collection = baza.collection("Ciscenja");

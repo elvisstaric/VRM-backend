@@ -43,14 +43,12 @@ export default {
   },
   provjera(req, res, next) {
     try {
-      let auth = req.headers.authorisation.split(" ");
-      let tip = auth[0];
-      let token = auth[1];
+      let auth = req.headers.token;
 
-      if (tip != "Bearer") {
+      if (!auth) {
         return res.status(401).send();
       } else {
-        req.jwt = jwt.verify(token, process.env.SECRET);
+        req.jwt = jwt.verify(auth, process.env.SECRET);
         return next();
       }
     } catch (error) {
