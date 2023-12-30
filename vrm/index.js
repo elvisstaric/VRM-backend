@@ -45,7 +45,7 @@ router.route("/objekt").get(auth.provjera, async (req, res) => {
     const collection = baza.collection("Objekti");
     let result = await collection
       .find({
-        /*dohvat samo za tog korisnika*/
+        korisnik: req.headers.korisnik,
       })
       .toArray();
     return result;
@@ -54,44 +54,56 @@ router.route("/objekt").get(auth.provjera, async (req, res) => {
   res.json(objekti);
 });
 
-//treba dodati da dohvaća samo za taj objekt!!
 router.route("/rezervacija").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Rezervacije");
-    let result = await collection.find({}).toArray();
+    let result = await collection
+      .find({
+        objekt_id: req.headers.id_obj,
+      })
+      .toArray();
     return result;
   }
   let rezervacije = await dohvat();
   res.json(rezervacije);
 });
 
-//treba dodati da dohvaća samo za tog korisnika!!!!
 router.route("/osoba").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Personal");
-    let result = await collection.find({}).toArray();
+    let result = await collection
+      .find({
+        korisnik: req.headers.korisnik,
+      })
+      .toArray();
     return result;
   }
   let personal = await dohvat();
   res.json(personal);
 });
 
-//dodati da dohvaca samo za taj objekt
 router.route("/odrzavanje").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Odrzavanja");
-    let result = await collection.find({}).toArray();
+    let result = await collection
+      .find({
+        objekt_id: req.headers.id_obj,
+      })
+      .toArray();
     return result;
   }
   let odrzavanja = await dohvat();
   res.json(odrzavanja);
 });
 
-//dodati da dohvaca samo za taj objekt
 router.route("/ciscenje").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const collection = baza.collection("Ciscenja");
-    let result = await collection.find({}).toArray();
+    let result = await collection
+      .find({
+        objekt_id: req.headers.id_obj,
+      })
+      .toArray();
     return result;
   }
   let ciscenja = await dohvat();
@@ -151,4 +163,59 @@ router.route("/ciscenje/:id").get(auth.provjera, async (req, res) => {
   }
   let rezervacije = await dohvat();
   res.json(rezervacije);
+});
+
+router.route("/rezervacija").post(auth.provjera, async (req, res) => {
+  let rezervacija = req.body;
+  try {
+    baza.collection("Rezervacije").insertOne(rezervacija.podatci);
+
+    return res.status(200).send();
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+router.route("/osoba").post(auth.provjera, async (req, res) => {
+  let osoba = req.body;
+  try {
+    baza.collection("Personal").insertOne(osoba.podatci);
+
+    return res.status(200).send();
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+router.route("/objekt").post(auth.provjera, async (req, res) => {
+  let objekt = req.body;
+  try {
+    baza.collection("Objekti").insertOne(objekt.podatci);
+
+    return res.status(200).send();
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+router.route("/odrzavanje").post(auth.provjera, async (req, res) => {
+  let odrzavanje = req.body;
+  try {
+    baza.collection("Odrzavanja").insertOne(odrzavanje.podatci);
+
+    return res.status(200).send();
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+router.route("/ciscenje").post(auth.provjera, async (req, res) => {
+  let ciscenje = req.body;
+  try {
+    baza.collection("Ciscenja").insertOne(ciscenje.podatci);
+
+    return res.status(200).send();
+  } catch (error) {
+    res.json(error);
+  }
 });
