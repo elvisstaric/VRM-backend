@@ -110,6 +110,26 @@ router.route("/ciscenje").get(auth.provjera, async (req, res) => {
   res.json(ciscenja);
 });
 
+router.route("/ciscenje_financije").get(auth.provjera, async (req, res) => {
+  async function dohvat() {
+    const collection = baza.collection("Ciscenja");
+    let result = await collection.find({}).toArray();
+    return result;
+  }
+  let ciscenja = await dohvat();
+  res.json(ciscenja);
+});
+
+router.route("/rezervacija_financije").get(auth.provjera, async (req, res) => {
+  async function dohvat() {
+    const collection = baza.collection("Rezervacije");
+    let result = await collection.find({}).toArray();
+    return result;
+  }
+  let ciscenja = await dohvat();
+  res.json(ciscenja);
+});
+
 router.route("/rezervacija/:id").get(auth.provjera, async (req, res) => {
   async function dohvat() {
     const id = req.params.id;
@@ -117,8 +137,8 @@ router.route("/rezervacija/:id").get(auth.provjera, async (req, res) => {
     let result = await collection.find({ _id: new ObjectId(id) }).toArray();
     return result;
   }
-  let rezervacije = await dohvat();
-  res.json(rezervacije);
+  let rezervacija = await dohvat();
+  res.json(rezervacija);
 });
 
 router.route("/osoba/:id").get(auth.provjera, async (req, res) => {
@@ -128,8 +148,8 @@ router.route("/osoba/:id").get(auth.provjera, async (req, res) => {
     let result = await collection.find({ _id: new ObjectId(id) }).toArray();
     return result;
   }
-  let rezervacije = await dohvat();
-  res.json(rezervacije);
+  let osoba = await dohvat();
+  res.json(osoba);
 });
 
 router.route("/odrzavanje/:id").get(auth.provjera, async (req, res) => {
@@ -139,8 +159,8 @@ router.route("/odrzavanje/:id").get(auth.provjera, async (req, res) => {
     let result = await collection.find({ _id: new ObjectId(id) }).toArray();
     return result;
   }
-  let rezervacije = await dohvat();
-  res.json(rezervacije);
+  let odrzavanje = await dohvat();
+  res.json(odrzavanje);
 });
 
 router.route("/objekt/:id").get(auth.provjera, async (req, res) => {
@@ -150,8 +170,8 @@ router.route("/objekt/:id").get(auth.provjera, async (req, res) => {
     let result = await collection.find({ _id: new ObjectId(id) }).toArray();
     return result;
   }
-  let rezervacije = await dohvat();
-  res.json(rezervacije);
+  let objekt = await dohvat();
+  res.json(objekt);
 });
 
 router.route("/ciscenje/:id").get(auth.provjera, async (req, res) => {
@@ -161,8 +181,8 @@ router.route("/ciscenje/:id").get(auth.provjera, async (req, res) => {
     let result = await collection.find({ _id: new ObjectId(id) }).toArray();
     return result;
   }
-  let rezervacije = await dohvat();
-  res.json(rezervacije);
+  let ciscenje = await dohvat();
+  res.json(ciscenje);
 });
 
 router.route("/rezervacija").post(auth.provjera, async (req, res) => {
@@ -218,4 +238,112 @@ router.route("/ciscenje").post(auth.provjera, async (req, res) => {
   } catch (error) {
     res.json(error);
   }
+});
+
+router.route("/rezervacija/:id").patch(auth.provjera, async (req, res) => {
+  async function zamjena() {
+    const id = req.params.id;
+    let podatci = req.body;
+    const collection = baza.collection("Rezervacije");
+    let result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: podatci }
+    );
+
+    return result;
+  }
+  let rezervacija = await zamjena();
+  res.json(rezervacija);
+});
+
+router.route("/osoba/:id").patch(auth.provjera, async (req, res) => {
+  async function zamjena() {
+    const id = req.params.id;
+    let podatci = req.body;
+    const collection = baza.collection("Personal");
+    let result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: podatci }
+    );
+
+    return result;
+  }
+  let osoba = await zamjena();
+  res.json(osoba);
+});
+
+router.route("/ciscenje/:id").patch(auth.provjera, async (req, res) => {
+  async function zamjena() {
+    const id = req.params.id;
+    let podatci = req.body;
+    const collection = baza.collection("Ciscenja");
+    let result = await collection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: podatci }
+    );
+
+    return result;
+  }
+  let ciscenje = await zamjena();
+  res.json(ciscenje);
+});
+
+router.route("/objekt/:id").delete(auth.provjera, async (req, res) => {
+  async function brisi() {
+    const id = req.params.id;
+    const collection = baza.collection("Objekti");
+    let result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+    return result;
+  }
+  let objekt = await brisi();
+  res.json(objekt);
+});
+
+router.route("/rezervacija/:id").delete(auth.provjera, async (req, res) => {
+  async function brisi() {
+    const id = req.params.id;
+    const collection = baza.collection("Rezervacije");
+    let result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+    return result;
+  }
+  let rezervacija = await brisi();
+  res.json(rezervacija);
+});
+
+router.route("/ciscenje/:id").delete(auth.provjera, async (req, res) => {
+  async function brisi() {
+    const id = req.params.id;
+    const collection = baza.collection("Ciscenja");
+    let result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+    return result;
+  }
+  let ciscenje = await brisi();
+  res.json(ciscenje);
+});
+
+router.route("/odrzavanje/:id").delete(auth.provjera, async (req, res) => {
+  async function brisi() {
+    const id = req.params.id;
+    const collection = baza.collection("Odrzavanja");
+    let result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+    return result;
+  }
+  let odrzavanje = await brisi();
+  res.json(odrzavanje);
+});
+
+router.route("/osoba/:id").delete(auth.provjera, async (req, res) => {
+  async function brisi() {
+    const id = req.params.id;
+    const collection = baza.collection("Personal");
+    let result = await collection.deleteOne({ _id: new ObjectId(id) });
+
+    return result;
+  }
+  let osoba = await brisi();
+  res.json(osoba);
 });
